@@ -28,7 +28,8 @@ main{padding:16px}
 .progressbar span{display:block;height:100%;background:var(--blue);width:0%;transition:width .2s}
 .checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .card{display:block;min-height:120px;background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px;position:relative;text-align:left;cursor:pointer;user-select:none;box-shadow:0 1px 2px #0000000a}
-.card input{position:absolute;right:13px;top:13px;width:31px;height:31px;accent-color:var(--blue);pointer-events:none}
+.checkmark{position:absolute;right:13px;top:13px;width:32px;height:32px;border:3px solid var(--blue);border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:950;color:var(--blue)}
+.card.done .checkmark{background:var(--blue);color:#fff}
 .card .label{font-size:16px;font-weight:950;padding-right:42px;line-height:1.12}
 .card .value{font-size:15px;font-weight:850;color:var(--blue);margin-top:12px;line-height:1.2;padding-right:2px}
 .card.done{background:var(--green);border-color:#b8cdb0}
@@ -89,7 +90,7 @@ ${emer?'<div class="emergency-title">FOLLOW THE SEQUENCE • FLY THE AIRCRAFT</d
 <div class="progress"><span>TAP ANYWHERE ON A CARD TO CHECK</span><span id="prog">${done} / ${rows.length} COMPLETE</span></div>
 <div class="progressbar"><span id="pbar" style="width:${rows.length?done/rows.length*100:0}%"></span></div>
 <div class="checkgrid ${emer?'single':''}">
-${rows.map((r,j)=>{let k=prefix+'-'+j,ck=!!state[k];return `<div class="card ${ck?'done':''}" data-key="${k}" data-total="${rows.length}" data-prefix="${prefix}" onclick="toggleCard(event,this)"><input type="checkbox" ${ck?'checked':''} aria-label="Complete ${esc(r[0])}" onclick="event.stopPropagation()" onchange="toggleCheckbox(this)"><div class="label">${esc(r[0])}</div><div class="value">${esc(r[1])}</div></div>`}).join('')}
+${rows.map((r,j)=>{let k=prefix+'-'+j,ck=!!state[k];return `<button type="button" class="card ${ck?'done':''}" data-key="${k}" data-total="${rows.length}" data-prefix="${prefix}" onclick="toggleCard(this)" aria-pressed="${ck}"><span class="checkmark">${ck?'✓':''}</span><div class="label">${esc(r[0])}</div><div class="value">${esc(r[1])}</div></button>`}).join('')}
 </div></main>`;}
 function updateProgress(total,prefix){
 const n=Object.keys(state).filter(x=>x.startsWith(prefix+'-')&&state[x]).length;
@@ -97,17 +98,13 @@ const prog=document.getElementById('prog');const bar=document.getElementById('pb
 if(prog) prog.textContent=n+' / '+total+' COMPLETE';
 if(bar) bar.style.width=(n/total*100)+'%';
 }
-function toggleCard(e,card){
-if(e.target.tagName==='INPUT') return;
+function toggleCard(card){
 const k=card.dataset.key,total=Number(card.dataset.total),prefix=card.dataset.prefix;
 state[k]=!state[k];save();
 card.classList.toggle('done',!!state[k]);
-card.querySelector('input').checked=!!state[k];
+card.setAttribute('aria-pressed',String(!!state[k]));
+card.querySelector('.checkmark').textContent=state[k]?'✓':'';
 updateProgress(total,prefix);
-}
-function toggleCheckbox(cb){
-const card=cb.closest('.card'),k=card.dataset.key,total=Number(card.dataset.total),prefix=card.dataset.prefix;
-state[k]=cb.checked;save();card.classList.toggle('done',!!state[k]);updateProgress(total,prefix);
 }
 function resetChecklist(prefix){
 Object.keys(state).filter(k=>k.startsWith(prefix+'-')).forEach(k=>delete state[k]);save();showChecklist(current.type,current.index);
@@ -125,6 +122,8 @@ function showPower(){
 app.innerHTML=`<header><h1>POWER SETTINGS</h1><div class="sub">VID / ZDS / UCI • 15,000 FT</div></header><main><button class="back" onclick="home()">← MENU</button>
 ${DATA.power.map(r=>`<div class="powercard"><div class="phase">${esc(r[0])}</div><div class="mp">${esc(r[1])}</div><div class="detail">${esc(r[2])}</div></div>`).join('')}
 <div class="note">3° approach: NM = ALT TO LOSE × 3 • 3° approach CC: ALT TO LOSE = NM TO RUN × 3 • 500 ft/min: NM = ALT TO LOSE × 0.5 • 1000 ft/min @ 120 kt = 2 NM</div></main>`;}
+document.addEventListener('click',function(e){const card=e.target.closest&&e.target.closest('.card[data-key]');if(card&&card.closest('.checkgrid')){e.preventDefault();toggleCard(card);}});
+document.addEventListener('touchend',function(e){const card=e.target.closest&&e.target.closest('.card[data-key]');if(card&&card.closest('.checkgrid')){e.preventDefault();toggleCard(card);}},{passive:false});
 home();
 </script>
 </body></html>
