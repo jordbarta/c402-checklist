@@ -89,14 +89,25 @@ ${emer?'<div class="emergency-title">FOLLOW THE SEQUENCE • FLY THE AIRCRAFT</d
 <div class="progress"><span>TAP ANYWHERE ON A CARD TO CHECK</span><span id="prog">${done} / ${rows.length} COMPLETE</span></div>
 <div class="progressbar"><span id="pbar" style="width:${rows.length?done/rows.length*100:0}%"></span></div>
 <div class="checkgrid ${emer?'single':''}">
-${rows.map((r,j)=>{let k=prefix+'-'+j,ck=!!state[k];return `<label class="card ${ck?'done':''}" onclick="toggle(event,'${k}',${rows.length},'${prefix}')"><input type="checkbox" ${ck?'checked':''} aria-label="Complete ${esc(r[0])}"><div class="label">${esc(r[0])}</div><div class="value">${esc(r[1])}</div></label>`}).join('')}
+${rows.map((r,j)=>{let k=prefix+'-'+j,ck=!!state[k];return `<div class="card ${ck?'done':''}" data-key="${k}" data-total="${rows.length}" data-prefix="${prefix}" onclick="toggleCard(event,this)"><input type="checkbox" ${ck?'checked':''} aria-label="Complete ${esc(r[0])}" onclick="event.stopPropagation()" onchange="toggleCheckbox(this)"><div class="label">${esc(r[0])}</div><div class="value">${esc(r[1])}</div></div>`}).join('')}
 </div></main>`;}
-function toggle(e,k,total,prefix){
-if(e.target.tagName==='INPUT'){state[k]=e.target.checked}else{state[k]=!state[k]}
-save();const card=e.currentTarget;card.classList.toggle('done',!!state[k]);const cb=card.querySelector('input');cb.checked=!!state[k];
+function updateProgress(total,prefix){
 const n=Object.keys(state).filter(x=>x.startsWith(prefix+'-')&&state[x]).length;
-document.getElementById('prog').textContent=n+' / '+total+' COMPLETE';
-document.getElementById('pbar').style.width=(n/total*100)+'%';
+const prog=document.getElementById('prog');const bar=document.getElementById('pbar');
+if(prog) prog.textContent=n+' / '+total+' COMPLETE';
+if(bar) bar.style.width=(n/total*100)+'%';
+}
+function toggleCard(e,card){
+if(e.target.tagName==='INPUT') return;
+const k=card.dataset.key,total=Number(card.dataset.total),prefix=card.dataset.prefix;
+state[k]=!state[k];save();
+card.classList.toggle('done',!!state[k]);
+card.querySelector('input').checked=!!state[k];
+updateProgress(total,prefix);
+}
+function toggleCheckbox(cb){
+const card=cb.closest('.card'),k=card.dataset.key,total=Number(card.dataset.total),prefix=card.dataset.prefix;
+state[k]=cb.checked;save();card.classList.toggle('done',!!state[k]);updateProgress(total,prefix);
 }
 function resetChecklist(prefix){
 Object.keys(state).filter(k=>k.startsWith(prefix+'-')).forEach(k=>delete state[k]);save();showChecklist(current.type,current.index);
