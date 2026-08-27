@@ -122,8 +122,6 @@ function showPower(){
 app.innerHTML=`<header><h1>POWER SETTINGS</h1><div class="sub">VID / ZDS / UCI • 15,000 FT</div></header><main><button class="back" onclick="home()">← MENU</button>
 ${DATA.power.map(r=>`<div class="powercard"><div class="phase">${esc(r[0])}</div><div class="mp">${esc(r[1])}</div><div class="detail">${esc(r[2])}</div></div>`).join('')}
 <div class="note">3° approach: NM = ALT TO LOSE × 3 • 3° approach CC: ALT TO LOSE = NM TO RUN × 3 • 500 ft/min: NM = ALT TO LOSE × 0.5 • 1000 ft/min @ 120 kt = 2 NM</div></main>`;}
-document.addEventListener('click',function(e){const card=e.target.closest&&e.target.closest('.card[data-key]');if(card&&card.closest('.checkgrid')){e.preventDefault();toggleCard(card);}});
-document.addEventListener('touchend',function(e){const card=e.target.closest&&e.target.closest('.card[data-key]');if(card&&card.closest('.checkgrid')){e.preventDefault();toggleCard(card);}},{passive:false});
 home();
 </script>
 </body></html>
