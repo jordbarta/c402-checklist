@@ -1,179 +1,125 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#234E7D">
-<title>C402C Digital Checklist</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#234f7d">
+<title>Handel Aviation Digital Checklist</title>
 <style>
-:root{--blue:#234E7D;--pblue:#EAF1F8;--red:#C91C24;--pred:#FBE9EA;--text:#15181B;--muted:#68727C;--line:#D6DADF;--yellow:#FFF4CF;--green:#EAF3E6}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#f5f6f7;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-button,label{font-family:inherit}
-#app{max-width:900px;margin:auto;min-height:100vh;padding-bottom:88px}
-header{background:var(--blue);color:white;padding:16px 18px 15px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px #0002}
-header.red{background:var(--red)}
-h1{font-size:23px;line-height:1.05;margin:0;font-weight:900;letter-spacing:.01em}
-.sub{font-size:11px;opacity:.82;margin-top:5px;font-weight:800;letter-spacing:.08em}
-main{padding:16px}
-.section{font-size:12px;color:var(--muted);font-weight:900;letter-spacing:.12em;margin:9px 2px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.big{min-height:76px;border:1px solid var(--line);border-radius:17px;background:#fff;font-size:16px;font-weight:900;color:var(--blue);padding:12px}
-.big.data{min-height:64px}
-.big:active,.tool:active,.em:active{transform:scale(.985)}
-.toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
-.back,.tool{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 13px;font-weight:900;color:var(--blue);font-size:14px}
-.tool.reset{color:var(--red)}
-.progress{font-size:12px;color:var(--muted);font-weight:900;margin-bottom:13px;display:flex;justify-content:space-between;gap:10px}
-.progressbar{height:7px;background:#e7eaed;border-radius:99px;overflow:hidden;margin-bottom:14px}
-.progressbar span{display:block;height:100%;background:var(--blue);width:0%;transition:width .2s}
-.checkgrid{display:grid;grid-template-columns:1fr;gap:10px}
-.card{display:block;min-height:78px;background:#fff;border:1px solid var(--line);border-radius:17px;padding:10px 14px;position:relative;text-align:left;user-select:none;box-shadow:0 1px 2px #0000000a;touch-action:pan-y}
-.checkmark{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border:3px solid var(--blue);border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:27px;font-weight:950;color:var(--blue);padding:0;margin:0;touch-action:manipulation;-webkit-user-select:none;user-select:none}
-.checkmark:active{transform:translateY(-50%) scale(.94)}
-.card.done .checkmark{background:var(--blue);color:#fff}
-.card .label{font-size:18px;font-weight:950;padding-right:58px;line-height:1.12}
-.card .num{display:inline-block;min-width:28px;color:var(--muted);font-weight:950}.card .value{font-size:17px;font-weight:850;color:var(--blue);margin-top:12px;line-height:1.2;padding-right:2px}
-.card.done{background:var(--green);border-color:#b8cdb0}
-.card.done .label,.card.done .value{opacity:.58;text-decoration:none}
-.single{grid-template-columns:1fr}
-.single .card{min-height:94px}.single .checkmark{width:44px;height:44px}
-.single .card .label{font-size:18px}
-.single .card .num{display:inline-block;min-width:28px;color:var(--muted);font-weight:950}.card .value{font-size:17px;margin-top:9px}
-.emergency-title{background:var(--pred);border:1px solid #e3b4b7;color:var(--red);font-size:12px;font-weight:950;border-radius:12px;padding:10px 12px;margin-bottom:12px}
-.embar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:9px 8px calc(9px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);gap:7px;z-index:20}
-.em{min-height:50px;border:1px solid #e2b2b5;border-radius:13px;background:var(--pred);color:var(--red);font-weight:950;font-size:12px}
-.hero{background:#fff;border:1px solid var(--line);border-radius:20px;padding:25px;text-align:center}
-.hero .num{font-size:52px;font-weight:950;color:var(--blue);line-height:1.05;margin:7px 0}
-.row{background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px;margin-bottom:8px;display:flex;justify-content:space-between;gap:12px;font-size:15px;font-weight:850}
-.row b{color:var(--blue);text-align:right}
-.powercard{background:#fff;border:1px solid var(--line);border-radius:17px;padding:16px;margin-bottom:11px}
-.powercard .phase{font-size:12px;font-weight:950;color:var(--blue);letter-spacing:.06em}
-.powercard .mp{font-size:23px;font-weight:950;margin-top:4px}
-.powercard .detail{font-size:13px;color:var(--muted);font-weight:750;margin-top:5px;line-height:1.25}
-.note{background:var(--yellow);border-radius:14px;padding:14px;font-size:12px;font-weight:800;line-height:1.35;margin-top:14px}
-@media(max-width:650px){.card .label{font-size:18px}.card .num{display:inline-block;min-width:30px;color:var(--muted);font-weight:950}.card .value{font-size:17px}}
-@media(min-width:800px){#app{max-width:980px}main{padding:20px}.card{min-height:128px}}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f4f6f8;color:#173b61}
+header{background:#285782;color:#fff;padding:22px 18px 20px;position:sticky;top:0;z-index:5;box-shadow:0 2px 8px #0002}
+h1{margin:0;font-size:27px;letter-spacing:.04em}h2{margin:8px 0 0;font-size:17px;letter-spacing:.08em;color:#dce8f3}
+main{max-width:1050px;margin:auto;padding:18px 16px 115px}.title{font-size:20px;font-weight:800;letter-spacing:.1em;color:#66717c;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.aircraft{background:#fff;border:2px solid #d5dce3;border-radius:22px;padding:17px;text-align:left;min-height:130px;box-shadow:0 1px 2px #0001}
+.aircraft strong{font-size:25px;display:block}.aircraft span{display:block;margin-top:8px;color:#687581;font-weight:600}.aircraft:active{transform:scale(.99)}
+.nav{display:flex;gap:8px;overflow:auto;margin:0 -16px;padding:0 16px 12px;position:sticky;top:79px;background:#f4f6f8;z-index:4}.nav button{white-space:nowrap;border:1px solid #c9d3dc;background:#fff;border-radius:12px;padding:10px 13px;color:#173b61;font-weight:800}.nav button.active{background:#285782;color:#fff}
+.panel{background:#fff;border:1px solid #d6dde4;border-radius:18px;padding:15px;margin:12px 0}.panel h3{margin:0 0 12px;font-size:18px}
+.item{display:flex;align-items:center;gap:11px;border:1px solid #d6dde4;border-radius:12px;padding:10px 11px;margin:7px 0;min-height:44px;color:#172d42}
+.item input{width:23px;height:23px;flex:0 0 auto;accent-color:#285782}.item.done{text-decoration:line-through;opacity:.55}
+.back{border:0;background:#e9eef3;color:#173b61;border-radius:12px;padding:10px 14px;font-weight:800;margin-bottom:12px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.ref{background:#f8fafb;border:1px solid #d8e0e7;border-radius:13px;padding:12px}.ref b{display:block;margin-bottom:5px}
+.warn{border-left:5px solid #d79b22}.danger{border-left:5px solid #c93434}
+.small{font-size:13px;color:#65727d}.hidden{display:none!important}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #d5dce3;padding:10px 12px;display:flex;gap:8px;z-index:8}
+.bottom button{flex:1;border:2px solid #e0a4a4;background:#fff0f0;color:#b62828;border-radius:13px;padding:13px 5px;font-weight:900}
+@media(max-width:650px){.grid,.cards{grid-template-columns:1fr}.nav{top:79px}.aircraft{min-height:105px}}
 </style>
 </head>
 <body>
-<div id="app"></div>
-<div class="embar">
-<button class="em" onclick="openEmergency(0)">ENG FAIL</button>
-<button class="em" onclick="openEmergency(3)">FIRE</button>
-<button class="em" onclick="openEmergency(4)">GEAR</button>
-<button class="em" onclick="openEmergency(5)">ELEC</button>
+<header><h1 id="headerTitle">HANDEL AVIATION</h1><h2 id="headerSub">DIGITAL CHECKLIST</h2></header>
+<main>
+<section id="aircraftSelect">
+<div class="title">SELECT AIRCRAFT</div>
+<div class="grid">
+<button class="aircraft" onclick="openAircraft('C210')"><strong>C210</strong><span>Checklist & Reference</span></button>
+<button class="aircraft" onclick="openAircraft('C310')"><strong>C310</strong><span>Checklist & Reference</span></button>
+<button class="aircraft" onclick="openAircraft('C310 TURBO')"><strong>C310 TURBO</strong><span>Checklist & Reference</span></button>
+<button class="aircraft" onclick="openAircraft('C402')"><strong>C402</strong><span>Checklist & Reference</span></button>
 </div>
+</section>
+
+<section id="aircraftPage" class="hidden">
+<button class="back" onclick="backToAircraft()">← BACK TO AIRCRAFT</button>
+<div class="title" id="aircraftTitle"></div>
+<div id="nav" class="nav"></div>
+<div id="content"></div>
+</section>
+</main>
+
+<div class="bottom">
+<button>ENG FAIL</button><button>FIRE</button><button>GEAR</button><button>ELEC</button>
+</div>
+
 <script>
-const DATA={"normal": {"PRE-FLIGHT": [["Pre-flight","COMPLETE"],["Cabin Doors","LATCHED & SECURE"],["Crew Doors","CLOSED & LOCKED"],["Controls Locks","REMOVE"],["Seats / Belts / Harnesses","ADJUST & SECURE"],["Fuel Selectors","MAIN TANKS"],["Landing Gear Switch","DOWN"],["Mixtures / Props / Throttles","SET"],["Switches / CBs","SET"],["Battery & Alternators","ON"],["Gear Position Lights","CHECK GREEN"],["Annunciator Panel","PRESS TO TEST"],["Lights","AS REQUIRED"],["Propellers","CLEAR"]], "START": [["Mags","ON"],["Engines","START"],["Starter Button","PRESS"],["Primer","L ENGINE / R ENGINE"],["Aux Fuel Pump","LOW"],["Throttle","800\u20131000 RPM"],["Engine Instruments","CHECK"],["Repeat","RIGHT ENGINE"],["Fuel Pump","OFF"]], "TAXI": [["Avionics Bus Switch", "ON"], ["Avionics", "SET"], ["Lights", "AS REQUIRED"], ["Cabin Temp", "AS REQUIRED"], ["Heating / Defrost", "Air OPEN • Defrost AS REQ • Temp OPEN • HEAT"], ["Ventilation", "Air OPEN • HEAT switch FAN"], ["Brakes", "RELEASE"], ["Throttles", "AS REQUIRED"], ["Brakes", "CHECK"], ["Gyros", "CHECK"], ["Compass", "CHECK"], ["TC", "CHECK"]], "BEFORE TAKEOFF / RUN UPS": [["Fuel Quantity", "CHECK"], ["Fuel Selectors", "MAIN TANKS"], ["Emergency Cross Feed", "CHECK OPEN"], ["Cowl Flaps", "OPEN"], ["Trim Tabs", "SET"], ["Wing Flaps", "UP"], ["Avionics / Radios", "SET"], ["Flight Instruments", "SET"], ["Alternate Air", "IN"], ["Aux Fuel Pumps", "LOW"], ["Flight Controls", "CHECK"], ["Run-up Throttles", "1700"], ["L & R HYD FLOW lights", "OFF"], ["Alternators", "CHECK"], ["Vacuum System", "CHECK"], ["Mags", "CHECK"], ["Propellers", "CHECK"], ["Mixtures", "CHECK"], ["Engine Instruments", "CHECK"], ["Throttles", "1000 RPM"], ["Quadrant Friction Lock", "ADJUST"], ["Exterior Lights", "AS REQUIRED"], ["Ice Protection", "AS REQUIRED"], ["Doors / Windows", "CLOSED"], ["Annunciator Panel", "CHECK"], ["Seat Belts / Harness", "SECURE"]], "TAKEOFF": [["Power", "SET FOR TAKEOFF"], ["Mixtures", "CHECK FUEL FLOWS IN WHITE ARC"], ["Engine Instruments", "CHECK"], ["Minimum control speed", "80 KIAS"], ["To 50 ft", "95 KIAS"], ["After T/O — Gear", "RETRACT"], ["Fuel Pumps", "OFF"], ["Lights", "AS REQUIRED"], ["Cruise Climb", "115–130 KIAS"]], "CLIMB / CRUISE": [["CLIMB — Power", "SET"], ["Mixtures", "ADJUST"], ["Cowl Flaps", "AS REQUIRED"], ["CRUISE — Power", "SET"], ["Mixtures", "LEAN"], ["Cowl Flaps", "CLOSE"], ["Props", "SYNC"], ["Trim Tabs", "ADJUST"]], "DESCENT": [["DESCENT — Fuel Selectors", "MAIN TANKS"], ["Power", "AS REQUIRED"], ["Mixtures", "ADJUST"], ["Cowl Flaps", "CLOSE"], ["Altimeter", "SET"], ["Seat Belts / Harness", "SECURE"], ["Wing Flaps", "AS REQUIRED"], ["Landing Gear", "DOWN"], ["Mixtures", "ADJUST"], ["Aux Fuel Pumps", "LOW"], ["Propellers", "FULL FORWARD"], ["Approach Speed", "95 KIAS @ 6850 lb"]], "LANDING": [["AFTER LANDING — Aux Pumps", "OFF"], ["Cowl Flaps", "OPEN"], ["Wing Flaps", "UP"]], "SECURE": [["Parking Brake", "SET if brakes are cool"], ["Accessory Switches", "OFF"], ["Aux Fuel Pumps", "OFF"], ["Engines", "SHUT DOWN"], ["Battery / Alternator / Mags", "OFF"], ["Aircraft", "SECURE"]]}, "emergency": {"ENGINE FAILURE": [["Immediate priority", "FLY THE AIRCRAFT"], ["Failure during flight", "DETERMINE INOP ENGINE"], ["Operative engine", "ADJUST AS REQUIRED"], ["Fuel Flow", "CHECK; if deficient AUX PUMPS ON"], ["Fuel Selectors", "MAIN TANKS — FEEL FOR DETENT"], ["Fuel Quantity", "CHECK"], ["Oil Pressure / Oil Temp", "CHECK"], ["Magneto Switches", "CHECK ON"], ["Mixture", "ADJUST / LEAN AS REQUIRED"], ["If engine does not start", "SECURE"], ["Throttle", "CLOSE"], ["Mixture", "IDLE CUT-OFF"], ["Propeller", "FEATHER"], ["Fuel Selector", "OFF — FEEL FOR DETENT"], ["Aux Fuel Pump", "OFF"], ["Magneto Switches", "OFF"], ["Alternator", "OFF"], ["Cowl Flap", "CLOSE"], ["Operative Engine Power", "AS REQUIRED"], ["Mixture", "ADJUST FOR POWER"], ["Fuel Selector", "AS REQUIRED — FEEL FOR DETENT"], ["Aux Fuel Pump", "ON"], ["Cowl Flap", "AS REQUIRED"]], "ENGINE FAILURE AFTER T/O": [["Condition", "Above 95 KIAS / gear UP or in transit"], ["Mixtures", "FULL RICH"], ["Propellers", "FULL FORWARD"], ["Throttles", "FULL FORWARD — 39.0 in"], ["Landing Gear", "CHECK UP"], ["Inoperative Engine — Throttle", "CLOSE"], ["Mixture", "IDLE CUT-OFF"], ["Propeller", "FEATHER"], ["Bank", "5° TOWARD OPERATIVE ENGINE"], ["Clear 50 ft obstacles", "95 KTS"], ["Climb", "104 KTS — VYSE"], ["Trim Tabs", "5° BANK TOWARD OPERATIVE ENGINE / ~½ BALL SLIP"], ["Cowl Flap", "CLOSE"], ["Fuel Selector", "OFF — FEEL FOR DETENT"], ["Aux Fuel Pump", "OFF"], ["Magnetos", "OFF"], ["Alternator", "OFF"], ["Land", "ASAP"]], "AIR START": [["Aircraft", "WITHOUT PROPELLER UNFEATHER SYSTEM"], ["Aux Fuel Pump", "CHECK OFF"], ["If ON — purge", "Pump OFF • Mixture ICO • Throttle fuel OPEN • Mags OFF • rotate 15 times"], ["Magnetos", "ON"], ["Fuel Selector", "MAIN TANK — FEEL FOR DETENT"], ["Throttle", "FORWARD ~1½ in"], ["Mixture", "FULL RICH THEN RETARD ~2 in"], ["Propeller", "FORWARD OF DETENT"], ["Starter", "PRESS"], ["Primer", "ACTIVATE"], ["Starter / Primer", "RELEASE WHEN ENGINE FIRES"], ["Aux Fuel Pump", "LOW"], ["Mixture", "ADJUST FOR SMOOTH OPERATION"], ["Power", "INCREASE AFTER CHT 200°F; gradual mixture increase"], ["Cowl Flap", "AS REQUIRED"], ["Alternator", "ON"]], "FORCED LANDING": [["WITH POWER — Site", "CHECK; overfly at 105 KIAS / 15° flaps"], ["Gear", "DOWN if smooth/hard; UP if rough/soft"], ["Surface", "Smooth grass-covered runway if possible"], ["Approach", "105 KIAS / 15° flaps"], ["Switches except mags", "OFF"], ["Cabin Door", "UNLATCH before flare"], ["Mixtures", "IDLE CUT-OFF"], ["Magnetos", "OFF"], ["Fuel Selectors", "OFF"], ["Emergency Cross Feed", "OFF — PULL UP"], ["Landing Attitude", "NOSE HIGH"], ["WITHOUT POWER — Initial Approach", "120 KIAS"], ["Gear on smooth/hard surface", "DOWN within gliding distance"], ["GEAR HYD CB", "PULL"], ["Emergency Gear T-handle", "PULL"], ["Gear Down Lights", "ON; UNLOCKED OFF"], ["Gear Warning Horn", "CHECK"], ["Flaps", "AS REQUIRED"], ["Approach", "105 KIAS"], ["Battery", "OFF"], ["Rough / soft surface", "Gear UP • Flaps 15° • 105 KIAS • Battery OFF • NOSE HIGH"]], "FIRE / SMOKE": [["GROUND — Throttles", "CLOSE"], ["Brakes", "AS REQUIRED"], ["Mixtures", "IDLE CUT-OFF"], ["Battery", "OFF — USE GANG BAR"], ["Magnetos", "OFF — USE GANG BAR"], ["Evacuate", "ASAP"], ["INFLIGHT — Aux Fuel Pumps", "BOTH OFF"], ["Operative Engine Fuel Selector", "MAIN TANK — FEEL FOR DETENT"], ["Emergency Cross Feed", "OFF — PULL UP"], ["Affected Engine", "SECURE"], ["Engine secure sequence", "Throttle CLOSE • Mixture ICO • Prop FEATHER • Fuel OFF • Mags OFF • Alt OFF • Cowl CLOSE"], ["Cabin Heater", "OFF"], ["Land / Evacuate", "ASAP"], ["CABIN FIRE/SMOKE — Electrical Load", "REDUCE TO MINIMUM"], ["Wemacs", "OPEN"], ["Cabin Air", "OPEN ALL VENTS INCLUDING WINDSHIELD DEFROST"], ["If smoke increases", "CLOSE VENTS"], ["Window caution", "Opening foul-weather/emergency exit window may intensify fire"]], "LANDING GEAR": [["HYD PRESS after cycle", "RAPIDLY INCREASE GEAR SWITCH"], ["If HYD PRESS remains", "Gear DOWN • GEAR HYD CB PULL"], ["If light remains", "LAND AS SOON AS PRACTICAL"], ["Gear will not extend — Airspeed", "130 KIAS OR LESS"], ["Gear Switch", "DOWN"], ["GEAR HYD CB", "PULL"], ["Emergency Gear T-handle", "PULL"], ["Gear Down Lights", "ON; UNLOCKED OFF"], ["Main gear not locked", "YAW AIRPLANE"], ["Gear Warning Horn", "CHECK"], ["Landing", "AS SOON AS PRACTICAL"], ["CAUTION", "Gear cannot retract in flight after emergency T-handle is pulled"], ["Gear will not retract hydraulically", "Gear DOWN • Down lights ON • Horn CHECK • LAND ASAP"]], "ELECTRICAL": [["SINGLE — Failure indication", "FAILURE LIGHT"], ["Electrical Load", "REDUCE"], ["CB tripped", "Affected alternator OFF → reset CB → alternator ON"], ["If CB reopens", "Affected alternator OFF"], ["CB not tripped", "Select affected alternator on voltammeter; monitor output"], ["Normal output + failure light", "Disregard indication; have indicator checked after landing"], ["Insufficient output", "Alternator OFF; reduce load to one alternator capacity"], ["Complete loss", "Check field fuse; replace as necessary"], ["Intermittent light + voltmeter fluctuation", "Affected alternator OFF; reduce load"], ["DUAL — Indication", "Failure lights + LOW VOLTAGE"], ["Load", "REDUCE"], ["CBs tripped", "Alternators OFF → reset CBs → LEFT ON / monitor"], ["If charging", "Leave ON; disregard failure"], ["If still inop", "Left OFF; repeat for right"], ["If CBs reopen", "Prepare to terminate flight"], ["CBs not tripped", "Alternators OFF → check field fuses"], ["Both still inop", "Alternators OFF → EMERGENCY ALTERNATOR FIELD ON"], ["Still inop", "Turn alternator OFF and prepare to terminate flight"]]}, "speeds": [["VNE", "235 KIAS"], ["VNO", "205 KIAS"], ["VMCA", "69 KIAS"], ["VYSE", "107 KIAS"], ["VA", "152 KIAS"], ["VFE", "180 / 149 KIAS*"], ["VLO / VLE", "180 KIAS"], ["VX", "84 KIAS"], ["VY", "112 KIAS"], ["VSO", "72 KIAS"], ["VS1", "81 KIAS"], ["VTOSS", "95 KIAS"], ["GLIDE", "117 KIAS"], ["VREF", "95 KIAS"], ["MAX CROSSWIND", "15 KTS"], ["USABLE FUEL", "775.2 L"]], "power":[["TAKE OFF","39\" / 2700 RPM","Normal after-takeoff setting varies with requirements; POH notes 2450 RPM / 29.5 inHg as a normal after-takeoff setting."],["MAX PERFORMANCE CLIMB","32\" / 2600 RPM","Operational climb setting noted: 32 inHg / 2600 RPM."],["MAX CLIMB","39\" / 2600 RPM","Technical maximum climb power; POH specifies 39 inHg below 16,000 ft."],["CRUISE CLIMB / 75%","29.5\" / 2450 RPM","Top of green • 75% cruise power • 115–140 KIAS."],["SURVEY","28\"–26\" / 2300 RPM","130 L/hr • 34 gal/hr • Cowl Flaps AS REQUIRED"],["DESCENT","28\"–23\" / 2400 RPM","100 L/hr • 26 gal/hr • Cowl Flaps CLOSED"],["APPROACH","23\" / 2400 RPM","100 L/hr • 26 gal/hr • Cowl Flaps OPEN"]]};
-const state=JSON.parse(localStorage.getItem('c402_v4_state')||'{}');
-let current={type:null,index:null};
-const app=document.getElementById('app');
-const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function save(){localStorage.setItem('c402_v4_state',JSON.stringify(state));}
+const data={
+"C402":{
+sections:["CHECKLIST","V-SPEEDS","FUEL","POWER","TROUBLESHOOT","EMERGENCY"],
+checklists:{
+"PRE-FLIGHT":["Exterior inspection","Interior inspection","Documents","Seats, belts & shoulder harnesses","Fire extinguishers","Control locks — removed","Control surfaces — check","Fuel quantity — check/set","Fuel caps & vents — check","Landing gear — check down","Wheel fairings — check","Oil quantity — check","Electrical equipment — check","Avionics & circuit breakers — check","Emergency equipment — check"],
+"BEFORE START":["Parking brake — SET","Battery / electrical — CHECK","Fuel selectors — CHECK","Mixtures — RICH","Propellers — FULL FINE","Cowl flaps — AS REQUIRED","Circuit breakers — CHECK"],
+"ENGINE START":["Area — CLEAR","Fuel pumps — AS REQUIRED","Starter — ENGAGE","Oil pressure — CHECK","Generator / alternator — CHECK","Engine instruments — CHECK"],
+"TAXI":["Brakes — CHECK","Flight instruments — CHECK","Engine instruments — CHECK","Flight controls — CHECK","Trim — SET"],
+"BEFORE TAKE-OFF / RUN UPS":["Flight controls — FREE","Trim — SET","Flaps — SET","Fuel selectors — CHECK","Mixtures — SET","Propellers — FULL FINE","Engine run-up — COMPLETE","Magnetos — CHECK","Max magneto drop — 150 RPM per magneto","Max L/R magneto drop difference — 50 RPM","Vacuum / electrical — CHECK","Doors / windows — SECURE"],
+"TAKE-OFF":["Power — SET","Engine instruments — CHECK","Airspeed — ALIVE","Rotate / climb — AS REQUIRED"],
+"CLIMB / CRUISE":["Power — SET","Mixtures — SET","Cowl flaps — AS REQUIRED","Propellers — SYNCHRONISE","Engine instruments — MONITOR"],
+"DESCENT":["Power — AS REQUIRED","Mixtures — AS REQUIRED","Cowl flaps — AS REQUIRED","Engine instruments — MONITOR"],
+"LANDING":["Fuel selectors — CHECK","Mixtures — AS REQUIRED","Propellers — AS REQUIRED","Landing gear — DOWN / CHECK","Flaps — AS REQUIRED","Cowl flaps — AS REQUIRED"],
+"AFTER LANDING":["Flaps — UP","Cowl flaps — AS REQUIRED","Trim — SET","Fuel pumps — AS REQUIRED"],
+"SECURE":["Parking brake — SET","Avionics — OFF","Electrical — OFF","Mixtures — IDLE CUT-OFF","Magnetos — OFF","Master — OFF"]
+},
+"v":"VNE 235 KIAS|VNO 205 KIAS|VMCA 69 KIAS (80 KIAS without VGs)|VTOSS 95 KIAS|VYSE 107 KIAS|VA 152 KIAS|VLO 180 KIAS|VLE 180 KIAS|Cruise 180 KIAS|Cruise climb 120 KIAS|VFE Flap 15° 180 KIAS|VFE Flap 45° 149 KIAS|Max demonstrated crosswind 15 kt",
+"fuel":"Usable fuel — 775.2 L|Start, taxi & take-off — 22 L|Climb — 148 L/hr|Cruise/descent — 89–137 L/hr|Variable reserve — 15% of flight fuel (climb + cruise + descent)|Fixed reserve — 78 L (45 min @ 104 L/hr)|Alternate/holding — AIP-ENR 1.1 Para 73, with company exception as specified in Ops Manual",
+"power":"Max-performance climb — 32 in / 2600 RPM|Maximum climb — 39 in / 2600 RPM (placarded limit below 16,000 ft)|Cruise climb / 75% — 29.5 in / 2450 RPM|Survey cowl flaps — AS REQUIRED",
+"troubleshoot":["NO INS SOLN — survey solution unavailable. Use applicable survey-system procedure.","PAUSED (NO INS SOLN) — survey system paused/lost solution. Use applicable survey-system procedure."],
+"emergency":["Engine failure","Engine fire","Landing gear malfunction","Electrical failure"]
+},
+"C210":{
+sections:["CHECKLIST","V-SPEEDS","FUEL","POWER","EMERGENCY"],
+checklists:{
+"PRE-FLIGHT":["Exterior inspection","Interior inspection","Documents","Fuel quantity / caps / vents","Oil quantity — CHECK","Landing gear — CHECK","Flight controls — CHECK","Emergency equipment — CHECK"],
+"BEFORE START":["Parking brake — SET","Battery / electrical — CHECK","Fuel selector — CHECK","Mixture — RICH","Propeller — FULL FINE"],
+"ENGINE START":["Area — CLEAR","Fuel pump — AS REQUIRED","Starter — ENGAGE","Oil pressure — CHECK","Alternator — CHECK"],
+"TAXI":["Brakes — CHECK","Flight instruments — CHECK","Engine instruments — CHECK","Flight controls — CHECK"],
+"BEFORE TAKE-OFF / RUN UPS":["Flight controls — FREE","Trim — SET","Flaps — SET","Fuel selector — CHECK","Mixture — SET","Propeller — FULL FINE","Engine run-up — COMPLETE"],
+"TAKE-OFF":["Power — SET","Engine instruments — CHECK","Airspeed — ALIVE"],
+"CLIMB / CRUISE":["Power — SET","Mixture — SET","Engine instruments — MONITOR"],
+"DESCENT":["Power — AS REQUIRED","Mixture — AS REQUIRED","Engine instruments — MONITOR"],
+"LANDING":["Fuel selector — CHECK","Mixture — AS REQUIRED","Propeller — AS REQUIRED","Landing gear — DOWN / CHECK","Flaps — AS REQUIRED"],
+"AFTER LANDING":["Flaps — UP","Trim — SET"],
+"SECURE":["Avionics — OFF","Electrical — OFF","Mixture — IDLE CUT-OFF","Magneto — OFF","Master — OFF"]
+},
+"v":"VNE 200 KIAS|VNO 165 KIAS|VTOSS 74 KIAS (MAUW)|Gear extension 165 KIAS|Gear retraction 165 KIAS|Max speed gear extended 200 KIAS|Max open window 200 KIAS|Cruise 145 KIAS|Cruise climb 105 KIAS|VFE Flap 10° 160 KIAS|VFE Flap 20° 130 KIAS|VFE Flap 30° 115 KIAS|Max demonstrated crosswind 21 kt",
+"fuel":"342 L total / 330 L usable|Start, taxi & take-off — 8 L|Flight fuel — 60 L/hr (climb + cruise + descent)|Fixed reserve — 45 L (45 min @ 60 L/hr)|Variable reserve — 15% of flight fuel|Alternate/holding — AIP-ENR 1.1 Para 73, with company exception as specified in Ops Manual",
+"power":"75% max power — 60 L/hr @ 8000 ft|65% max power — 51 L/hr @ 8000 ft|55% max power — 45 L/hr @ 8000 ft|Oil — 11 qt capacity; minimum 7 qt",
+"emergency":["Engine failure","Engine fire","Landing gear malfunction"]
+},
+"C310":{
+sections:["CHECKLIST","V-SPEEDS","FUEL","POWER","EMERGENCY"],
+checklists:{
+"PRE-FLIGHT":["Exterior inspection","Interior inspection","Documents","Fuel quantity / caps / vents","Oil quantity — CHECK","Landing gear — CHECK","Flight controls — CHECK","Emergency equipment — CHECK"],
+"BEFORE START":["Parking brake — SET","Battery / electrical — CHECK","Fuel selectors — CHECK","Mixtures — RICH","Propellers — FULL FINE"],
+"ENGINE START":["Area — CLEAR","Fuel pumps — AS REQUIRED","Starter — ENGAGE","Oil pressure — CHECK","Alternators — CHECK"],
+"TAXI":["Brakes — CHECK","Flight instruments — CHECK","Engine instruments — CHECK","Flight controls — CHECK"],
+"BEFORE TAKE-OFF / RUN UPS":["Flight controls — FREE","Trim — SET","Flaps — SET","Fuel selectors — CHECK","Mixtures — SET","Propellers — FULL FINE","Engine run-up — COMPLETE"],
+"TAKE-OFF":["Power — SET","Engine instruments — CHECK","Airspeed — ALIVE"],
+"CLIMB / CRUISE":["Power — SET","Mixtures — SET","Propellers — SYNCHRONISE","Engine instruments — MONITOR"],
+"DESCENT":["Power — AS REQUIRED","Mixtures — AS REQUIRED","Engine instruments — MONITOR"],
+"LANDING":["Fuel selectors — CHECK","Mixtures — AS REQUIRED","Propellers — AS REQUIRED","Landing gear — DOWN / CHECK","Flaps — AS REQUIRED"],
+"AFTER LANDING":["Flaps — UP","Trim — SET"],
+"SECURE":["Avionics — OFF","Electrical — OFF","Mixtures — IDLE CUT-OFF","Magnetos — OFF","Master — OFF"]
+},
+"v":"VNE 223 KIAS|VNO 181 KIAS|VA 148 KIAS|VMCA 71 KIAS|VTOSS 92 KIAS|VYSE 106 KIAS|VLO 138 KIAS|VLE 138 KIAS|Cruise 180 KIAS|Cruise climb 130 KIAS|VFE Flap 0–15° 158 KIAS|VFE Flap 15–35° 139 KIAS|Max demonstrated crosswind 19 kt",
+"fuel":"619 L usable total|Start, taxi & take-off — 18 L|Climb — 135 L/hr|Cruise/descent — 75–119 L/hr|Variable reserve — 15% of flight fuel|Fixed reserve — 78 L (45 min @ 104 L/hr)|Alternate/holding — AIP-ENR 1.1 Para 73, with company exception as specified in Ops Manual",
+"power":"Take-off — Full throttle / 2700 RPM / 92–95 LPH|Climb — 24.5 in / 2500 RPM / 68 LPH|Cruise 65% — 21 in / 2400 RPM / 51 LPH|Cruise 50% — 16 in / 2400 RPM / 41 LPH|Cruise 45% — 16 in / 2300 RPM / 39 LPH|Descent — as required; same RPM as cruise|CHT limits — 200°F minimum; 380–460°F maximum as applicable to setting|Avoid reducing throttle more than 2 in at a time; plan about 1 in/min|Monitor EGTs and CHTs; adjust fuel flow as required",
+"emergency":["Engine failure","Engine fire","Landing gear malfunction","Electrical failure"]
+},
+"C310 TURBO":{sections:["CHECKLIST","V-SPEEDS","FUEL","POWER","EMERGENCY"],checklists:{},v:"Turbo-specific source material not yet loaded.",fuel:"Turbo-specific fuel policy not yet loaded.",power:"Turbo-specific power settings not yet loaded.",emergency:["Turbo emergency procedures — source material required."]}
+};
 
-function home(){
-  app.innerHTML=`<header><h1>HANDEL AVIATION</h1><div class="sub">DIGITAL AIRCRAFT CHECKLIST</div></header><main>
-  <div class="section">SELECT AIRCRAFT</div>
-  <div class="grid">
-    <button class="big" onclick="showAircraftUnavailable('C210')">C210</button>
-    <button class="big" onclick="showAircraftUnavailable('C310')">C310</button>
-    <button class="big" onclick="showAircraftUnavailable('C310 TURBO')">C310 TURBO</button>
-    <button class="big" onclick="showC402()">C402</button>
-  </div>
-  <div class="note">C402 is the current working aircraft. The other aircraft can be populated with their aircraft-specific data and procedures.</div>
-  </main>`;
-}
-function showAircraftUnavailable(name){
-  app.innerHTML=`<header><h1>${esc(name)}</h1><div class="sub">HANDEL AVIATION • DIGITAL CHECKLIST</div></header><main>
-  <button class="back" onclick="home()">← MENU</button>
-  <div class="hero"><div class="num">COMING SOON</div><strong>${esc(name)} CHECKLIST</strong>
-  <div class="note">This aircraft has not been populated yet. C402 is the current working aircraft.</div></div></main>`;
-}
-function showC402(){
-  app.innerHTML=`<header><h1>CESSNA 402C</h1><div class="sub">HANDEL AVIATION • DIGITAL CHECKLIST</div></header><main>
-  <div class="section">AIRCRAFT DATA</div><div class="grid">
-    <button class="big data" onclick="showData()">V-SPEEDS</button>
-    <button class="big data" onclick="showFuel()">FUEL — 775.2 L</button>
-    <button class="big data" onclick="showPower()">POWER SETTINGS</button>
-  </div>
-  <div class="section">SURVEY</div><div class="grid">
-    <button class="big data" onclick="showSurveyTroubleshooting()">SURVEY TROUBLESHOOTING</button>
-  </div>
-  <div class="section">NORMAL OPERATIONS</div><div class="grid">
-    ${Object.keys(DATA.normal).map((x,i)=>`<button class="big" onclick="showChecklist('n',${i})">${esc(x)}</button>`).join('')}
-  </div>
-  <div class="note">REFERENCE ONLY — USE WITH CURRENT POH/AFM AND OPERATOR PROCEDURES. Working draft for testing and review.</div>
-  </main>`;
-}
-function showChecklist(type,i){
-const source=type==='n'?DATA.normal:DATA.emergency;const key=Object.keys(source)[i];const rows=source[key];const emer=type==='e';current={type,index:i};
-const prefix=(emer?'e':'n')+i;const done=rows.reduce((n,_,j)=>n+(state[prefix+'-'+j]?1:0),0);
-app.innerHTML=`<header class="${emer?'red':''}"><h1>${esc(key)}</h1><div class="sub">${emer?'EMERGENCY CHECKLIST':'NORMAL CHECKLIST'}</div></header><main>
-<div class="toolbar"><button class="back" onclick="home()">← MENU</button><button class="tool reset" onclick="resetChecklist('${prefix}')">RESET</button></div>
-${emer?'<div class="emergency-title">FOLLOW THE SEQUENCE • FLY THE AIRCRAFT</div>':''}
-<div class="progress"><span>TAP ✓ TO CHECK</span><span id="prog">${done} / ${rows.length} COMPLETE</span></div>
-<div class="progressbar"><span id="pbar" style="width:${rows.length?done/rows.length*100:0}%"></span></div>
-<div class="checkgrid ${emer?'single':''}">
-${rows.map((r,j)=>{let k=prefix+'-'+j,ck=!!state[k];return `<div class="card ${ck?'done':''}" data-key="${k}" data-total="${rows.length}" data-prefix="${prefix}"><button class="checkmark" type="button" onclick="toggleCard(event,this)" aria-label="${ck?'Uncheck':'Check'} item ${j+1}" aria-pressed="${ck}">${ck?'✓':''}</button><div class="label"><span class="num">${j+1}.</span> ${esc(r[0])}</div><div class="value">${esc(r[1])}</div></div>`}).join('')}
-</div></main>`;}
-function updateProgress(total,prefix){
-const n=Object.keys(state).filter(x=>x.startsWith(prefix+'-')&&state[x]).length;
-const prog=document.getElementById('prog');const bar=document.getElementById('pbar');
-if(prog) prog.textContent=n+' / '+total+' COMPLETE';
-if(bar) bar.style.width=(n/total*100)+'%';
-}
-function toggleCard(e,button){
-e.stopPropagation();
-const card=button.closest('.card'),k=card.dataset.key,total=Number(card.dataset.total),prefix=card.dataset.prefix;
-state[k]=!state[k];save();
-card.classList.toggle('done',!!state[k]);
-button.setAttribute('aria-pressed',String(!!state[k]));
-button.setAttribute('aria-label',(state[k]?'Uncheck':'Check')+' item '+k.split('-').pop());
-button.textContent=state[k]?'✓':'';
-updateProgress(total,prefix);
-}
-function resetChecklist(prefix){
-Object.keys(state).filter(k=>k.startsWith(prefix+'-')).forEach(k=>delete state[k]);save();showChecklist(current.type,current.index);
-}
-function openEmergency(i){showChecklist('e',i)}
-function showData(){
-app.innerHTML=`<header><h1>V-SPEEDS</h1><div class="sub">AIRCRAFT DATA</div></header><main><button class="back" onclick="home()">← MENU</button>
-${DATA.speeds.map(r=>`<div class="row"><span>${esc(r[0])}</span><b>${esc(r[1])}</b></div>`).join('')}
-<div class="note">* VFE: check aircraft markings. Weight figures are intentionally omitted because the fleet aircraft have different weights.</div></main>`;}
-function showFuel(){
-app.innerHTML=`<header><h1>FUEL</h1><div class="sub">AIRCRAFT DATA • FUEL POLICY</div></header><main><button class="back" onclick="home()">← MENU</button>
-<div class="hero"><div>USABLE FUEL</div><div class="num">775.2 L</div><strong>TOTAL USABLE FUEL</strong></div>
-<div class="section">FUEL POLICY</div>
-<div class="row"><span>Start / Taxi / Take-off</span><b>22 L</b></div>
-<div class="row"><span>Climb Fuel</span><b>148 L/hr</b></div>
-<div class="row"><span>Cruise / Descent</span><b>89–137 L/hr</b></div>
-<div class="row"><span>Variable Reserve</span><b>15% of flight fuel</b></div>
-<div class="row"><span>Fixed Reserve</span><b>78 L • 45 min @ 104 L/hr</b></div>
-<div class="row"><span>Alternate / Holding</span><b>As per AIP / flight manual</b></div>
-<div class="note">Variable reserve is 15% of flight fuel (climb + cruise + descent). Alternate/holding fuel is to be set as required by the applicable AIP/ENR 1.1 requirements and aircraft flight manual.</div></main>`;}
-
-function showSurveyTroubleshooting(){
-  app.innerHTML=`<header><h1>SURVEY TROUBLESHOOTING</h1><div class="sub">QUICK REFERENCE • SURVEY SYSTEM</div></header>
-  <main>
-    <button class="back" onclick="showC402()">← MENU</button>
-    <div class="powercard">
-      <div class="phase">NO INS SOLN</div>
-      <div class="mp">FIGURE 8</div>
-      <div class="detail">If the survey display shows “Paused (No INS Soln)” / “No INS Soln”, fly a figure 8 to reset/re-establish the solution.</div>
-    </div>
-    <div class="powercard">
-      <div class="phase">SUN ANGLE LOW</div>
-      <div class="mp">FIGURE 8</div>
-      <div class="detail">This can appear with the INS solution warning. Fly a figure 8 to reset/re-establish the solution.</div>
-    </div>
-    <div class="note">Working survey troubleshooting note based on observed aircraft/survey-system behaviour. Confirm against current operator/survey-system procedures before operational use.</div>
-  </main>`;
-}
-
-function showPower(){
-app.innerHTML=`<header><h1>POWER SETTINGS</h1><div class="sub">VID / ZDS / UCI • 15,000 FT</div></header><main><button class="back" onclick="home()">← MENU</button>
-${DATA.power.map(r=>`<div class="powercard"><div class="phase">${esc(r[0])}</div><div class="mp">${esc(r[1])}</div><div class="detail">${esc(r[2])}</div></div>`).join('')}
-<div class="note">3° approach: NM = ALT TO LOSE × 3 • 3° approach CC: ALT TO LOSE = NM TO RUN × 3 • 500 ft/min: NM = ALT TO LOSE × 0.5 • 1000 ft/min @ 120 kt = 2 NM</div></main>`;}
-home();
+let current=null, currentSection="CHECKLIST";
+function openAircraft(a){current=a;document.getElementById("aircraftSelect").classList.add("hidden");document.getElementById("aircraftPage").classList.remove("hidden");document.getElementById("aircraftTitle").textContent=a;renderNav();render();}
+function backToAircraft(){document.getElementById("aircraftPage").classList.add("hidden");document.getElementById("aircraftSelect").classList.remove("hidden");}
+function renderNav(){let d=data[current],n=document.getElementById("nav");n.innerHTML=d.sections.map((s,i)=>`<button class="${i===0?'active':''}" onclick="currentSection='${s}';renderNav();render()">${s}</button>`).join("")}
+function render(){let c=document.getElementById("content"),d=data[current];c.innerHTML="";if(currentSection==="CHECKLIST"){Object.entries(d.checklists).forEach(([name,items])=>{let p=document.createElement("div");p.className="panel";p.innerHTML=`<h3>${name}</h3>`;items.forEach((x,i)=>{let id=current+"-"+name+"-"+i;let row=document.createElement("label");row.className="item";row.innerHTML=`<input type="checkbox" onchange="this.parentElement.classList.toggle('done',this.checked)"><span>${i+1}. ${x}</span>`;p.appendChild(row)});c.appendChild(p)})}else if(currentSection==="V-SPEEDS"||currentSection==="FUEL"||currentSection==="POWER"){let key=currentSection==="V-SPEEDS"?"v":currentSection.toLowerCase();let p=document.createElement("div");p.className="panel";p.innerHTML=`<h3>${currentSection}</h3>`;let lines=(d[key]||"").split("|");lines.forEach(x=>{let r=document.createElement("div");r.className="ref";r.textContent=x;p.appendChild(r)});c.appendChild(p)}else if(currentSection==="TROUBLESHOOT"){let p=document.createElement("div");p.className="panel";p.innerHTML="<h3>SURVEY TROUBLESHOOTING</h3>";d.troubleshoot.forEach(x=>{let r=document.createElement("div");r.className="ref warn";r.textContent=x;p.appendChild(r)});c.appendChild(p)}else{let p=document.createElement("div");p.className="panel danger";p.innerHTML="<h3>EMERGENCY PROCEDURES</h3>";(d.emergency||[]).forEach(x=>{let r=document.createElement("div");r.className="ref";r.textContent=x;p.appendChild(r)});c.appendChild(p)}}
 </script>
 </body></html>
