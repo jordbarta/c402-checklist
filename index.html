@@ -10,13 +10,14 @@ header{background:#285782;color:#fff;padding:20px 16px;box-shadow:0 2px 7px #000
 h1{margin:0;font-size:28px;letter-spacing:.04em}h2{margin:5px 0 0;font-size:15px;font-weight:700;letter-spacing:.09em;color:#dce8f3}
 main{max-width:900px;margin:auto;padding:16px 14px 95px}.section{font-size:14px;font-weight:900;letter-spacing:.12em;color:#667582;margin:14px 2px 9px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.big{width:100%;background:#fff;border:1px solid #d5dde4;border-radius:16px;padding:16px 14px;text-align:left;color:#183b5d;font-size:17px;font-weight:850;box-shadow:0 1px 2px #0001}
-.big:active{transform:scale(.99)}.back{border:0;background:#e7edf2;color:#183b5d;border-radius:11px;padding:10px 14px;font-weight:850;margin-bottom:9px}
+.big:active{transform:scale(.99)}.back{border:0;background:#e7edf2;color:#183b5d;border-radius:11px;padding:10px 14px;font-weight:850;margin-bottom:9px}.reset{border:1px solid #e0b1b1;background:#fff5f5;color:#b32929;border-radius:11px;padding:10px 14px;font-weight:850;margin:0 0 12px 6px}
 .check{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #d5dde4;border-radius:13px;padding:9px 11px;margin:6px 0;min-height:52px;color:#17324a;font-size:16px}
 .check input{width:24px;height:24px;flex:0 0 24px;accent-color:#285782}.check.done{opacity:.5;text-decoration:line-through}
-.card{background:#fff;border:1px solid #d5dde4;border-radius:15px;padding:13px;margin:8px 0}.card b{display:block;font-size:16px;margin-bottom:5px}.muted{color:#657582;font-size:13px}
+.card{background:#fff;border:1px solid #d5dde4;border-radius:15px;padding:16px;margin:9px 0;box-shadow:0 1px 2px #0001}.card b{display:block;font-size:17px;margin-bottom:6px}.muted{color:#657582;font-size:13px}
 .danger{border-left:5px solid #c93434}.warn{border-left:5px solid #d79b22}.note{background:#eef3f7;border-radius:12px;padding:11px;margin-top:12px;color:#5c6c77;font-size:13px}
+.refgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.refgrid .card{margin:0;min-height:72px;display:flex;flex-direction:column;justify-content:center}
 .bottom{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #d5dde4;padding:9px;display:flex;gap:7px;z-index:8}.bottom button{flex:1;border:1px solid #e0b1b1;background:#fff5f5;color:#b32929;border-radius:11px;padding:11px 3px;font-weight:900}
-@media(max-width:600px){.grid{grid-template-columns:1fr}.big{padding:15px}.check{font-size:16px}}
+@media(max-width:600px){.grid,.refgrid{grid-template-columns:1fr}.big{padding:15px}.check{font-size:16px}}
 </style>
 </head>
 <body>
@@ -109,10 +110,53 @@ function renderAircraft(){let d=F[aircraft];app.innerHTML=`<button class="back" 
 <div class="section">AIRCRAFT DATA</div><div class="grid">${Object.keys(d.refs).map(k=>`<button class="big" onclick="showRef('${esc(k)}')">${esc(k)}</button>`).join("")}</div>
 ${aircraft==="C402"?`<div class="section">SURVEY</div><div class="grid"><button class="big" onclick="showTrouble()">SURVEY TROUBLESHOOTING</button></div>`:""}
 <div class="section">EMERGENCY</div><div class="grid"><button class="big" onclick="showEmergency()">EMERGENCY PROCEDURES</button></div>`}
-function showChecklist(k){let items=F[aircraft].normal[k]||[];app.innerHTML=`<button class="back" onclick="renderAircraft()">← BACK</button><div class="section">${esc(k)}</div>${items.map((x,i)=>`<label class="check"><input type="checkbox"><span>${i+1}. ${esc(x)}</span></label>`).join("")}`}
-function showRef(k){let items=F[aircraft].refs[k]||[];app.innerHTML=`<button class="back" onclick="renderAircraft()">← BACK</button><div class="section">${esc(k)}</div>${items.map(x=>`<div class="card"><b>${esc(x)}</b></div>`).join("")}`}
+function showChecklist(k){
+let items=F[aircraft].normal[k]||[];
+app.innerHTML=`<div><button class="back" onclick="renderAircraft()">← BACK</button><button class="reset" onclick="resetChecklist()">RESET</button></div>
+<div class="section">${esc(k)}</div>
+<div id="checklistBody">${items.map((x,i)=>`<label class="check"><input type="checkbox"><span>${i+1}. ${esc(x)}</span></label>`).join("")}</div>`;
+}
+function resetChecklist(){
+document.querySelectorAll("#checklistBody input[type=checkbox]").forEach(cb=>{cb.checked=false;cb.closest(".check").classList.remove("done")});
+}
+function showRef(k){
+let items=F[aircraft].refs[k]||[];
+app.innerHTML=`<button class="back" onclick="renderAircraft()">← BACK</button><div class="section">${esc(k)}</div>
+<div class="refgrid">${items.map(x=>{
+  let parts=x.split(" — ");
+  if(parts.length>1) return `<div class="card"><b>${esc(parts[0])}</b><div class="muted">${esc(parts.slice(1).join(" — "))}</div></div>`;
+  let sep=x.indexOf(" — ");
+  return `<div class="card"><b>${esc(x)}</b></div>`;
+}).join("")}</div>`}
 function showTrouble(){app.innerHTML=`<button class="back" onclick="renderAircraft()">← BACK</button><div class="section">SURVEY TROUBLESHOOTING</div>${F.C402.trouble.map(x=>`<div class="card warn"><b>${esc(x)}</b></div>`).join("")}<div class="note">Working reference based on the survey-system behaviour you supplied. Confirm against current system/operator procedures.</div>`}
-function showEmergency(){let items=F[aircraft].emergency||[];app.innerHTML=`<button class="back" onclick="renderAircraft()">← BACK</button><div class="section">EMERGENCY PROCEDURES</div>${items.map(x=>`<div class="card danger"><b>${esc(x)}</b></div>`).join("")}`}
+const emergencyDetail={
+"C402":{
+"Engine failure":["ENGINE FAILURE — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / POH PROCEDURE."],
+"Engine fire":["ENGINE FIRE — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / POH PROCEDURE."],
+"Landing gear malfunction":["LANDING GEAR MALFUNCTION — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / POH PROCEDURE."],
+"Electrical failure":["ELECTRICAL FAILURE — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / POH PROCEDURE."]
+},
+"C210":{
+"Engine failure":["ENGINE FAILURE — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / POH PROCEDURE."],
+"Engine fire":["ENGINE FIRE — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / POH PROCEDURE."],
+"Landing gear malfunction":["LANDING GEAR MALFUNCTION — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / POH PROCEDURE."]
+},
+"C310":{
+"Engine failure":["ENGINE FAILURE — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / QRH PROCEDURE."],
+"Engine fire":["ENGINE FIRE — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / QRH PROCEDURE."],
+"Landing gear malfunction":["LANDING GEAR MALFUNCTION — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / QRH PROCEDURE."],
+"Electrical failure":["ELECTRICAL FAILURE — USE CURRENT AIRCRAFT EMERGENCY CHECKLIST / QRH PROCEDURE."]
+}
+};
+function showEmergency(){
+let items=F[aircraft].emergency||[];
+app.innerHTML=`<button class="back" onclick="renderAircraft()">← BACK</button><div class="section">EMERGENCY PROCEDURES</div>
+${items.map(x=>`<button class="big danger" style="margin:5px 0" onclick="showEmergencyDetail('${esc(x)}')">${esc(x)}</button>`).join("")}`;}
+function showEmergencyDetail(name){
+let d=(emergencyDetail[aircraft]||{})[name]||["Source material required for this emergency procedure."];
+app.innerHTML=`<button class="back" onclick="showEmergency()">← BACK</button><div class="section">${esc(name)}</div>
+${d.map((x,i)=>`<label class="check"><input type="checkbox"><span>${i+1}. ${esc(x)}</span></label>`).join("")}
+<div class="note">Emergency procedure content must be populated from the current aircraft QRH/POH. Do not use this working placeholder as an operational procedure.</div>`}
 home();
 </script>
 </body>
